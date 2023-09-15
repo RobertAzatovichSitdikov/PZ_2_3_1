@@ -8,6 +8,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.alishev.springcourse.dao.UserDAO;
 import ru.alishev.springcourse.models.User;
+import ru.alishev.springcourse.service.UserService;
 
 import javax.validation.Valid;
 
@@ -15,24 +16,22 @@ import javax.validation.Valid;
 @RequestMapping("/users")
 public class UsersController {
 
-    private final UserDAO userDAO;
+    private final UserService userService;
 
     @Autowired
-    public UsersController(UserDAO userDAO) {
-        this.userDAO = userDAO;
+    public UsersController(UserService userService) {
+        this.userService = userService;
     }
 
     @GetMapping()
     public String index(Model model) {
-        // Получим всех людей из DAO и передадим на отображение в представление
-        model.addAttribute("users", userDAO.index());
+        model.addAttribute("users", userService.index());
         return "users/index";
     }
 
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model) {
-        // Получим одного человека по id из DAO и передадим на отображение в представление
-        model.addAttribute("user", userDAO.show(id));
+        model.addAttribute("user", userService.show(id));
         return "users/show";
     }
 
@@ -49,14 +48,14 @@ public class UsersController {
             return "users/new";
         }
 
-        userDAO.save(user);
+        userService.save(user);
 
         return "redirect:/users";
     }
 
     @GetMapping("/{id}/edit")
     public String edit(Model model, @PathVariable("id") int id) {
-        model.addAttribute("user", userDAO.show(id));
+        model.addAttribute("user", userService.show(id));
         return "users/edit";
     }
 
@@ -67,13 +66,13 @@ public class UsersController {
         if (bindingResult.hasErrors()) {
             return "users/edit";
         }
-        userDAO.update(id, user);
+        userService.update(user);
         return "redirect:/users";
     }
 
     @DeleteMapping("/{id}")
     public String delete(@PathVariable("id") int id) {
-        userDAO.delete(id);
+        userService.delete(id);
         return "redirect:/users";
     }
 }
