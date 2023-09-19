@@ -1,6 +1,7 @@
 package ru.alishev.springcourse.dao;
 
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.alishev.springcourse.models.User;
 
@@ -9,7 +10,6 @@ import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @Component
-@Transactional
 public class UserDAO {
 
     @PersistenceContext
